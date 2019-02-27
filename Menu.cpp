@@ -5,16 +5,18 @@ using namespace std;
 
 Menu::Menu()
 {
-  exit = false;
   rows = 0;
   columns = 0;
   density = 0.0;
   boundary = "";
+  output = "";
+  sim = NULL;
 }
 
 Menu::~Menu()
 {
   cout << "No news is good news." << endl;
+  delete sim;
 }
 
 void Menu::initialize()
@@ -44,11 +46,15 @@ void Menu::initialize()
       cout << "Enter the number of columns: ";
       setParameter(&columns);
       setDensity();
+
+      //creates a new map from scratch
+      sim = new Game(rows, columns);
+      cout << sim->toString();
     }
     else if (userInput == "3")
     {
       validInput = true;
-      exit = true;
+      //add some exit code
     }
     else
     {
@@ -64,7 +70,7 @@ void Menu::setParameter(int* value)
   string input;
   bool success = false;
 
-  while(!success)
+  while (!success)
   {
     stringstream convertor;
 
@@ -89,7 +95,7 @@ void Menu::setDensity()
 
   cout << "Enter the initial population density (Greater than 0 but less than 1): ";
 
-  while(!success)
+  while (!success)
   {
     stringstream convertor;
 
@@ -102,7 +108,7 @@ void Menu::setDensity()
     }
     else
     {
-      if((density > 0) && (density <= 1))
+      if ((density > 0) && (density <= 1))
         success = true;
       else
         cout << "You need to enter a value >0 and <= 1." << endl;
@@ -120,7 +126,7 @@ void Menu::setBoundary()
   cout << "2. Doughnut" << endl;
   cout << "3. Mirror" << endl;
 
-  while(!isValid)
+  while (!isValid)
   {
     cout << "Please enter a number corresponding to your choice: ";
     getline(cin, input);
@@ -154,4 +160,67 @@ void Menu::printResults()
   cout << "Columns: " << columns << endl;
   cout << "Density: " << density << endl;
   cout << boundary << endl;
+  cout << output << endl;
+}
+
+void Menu::setOutput()
+{
+  bool isValid = false;
+  string userInput = "";
+
+  cout << "-Output Type-" << endl;
+  cout << "1. Brief pause between generations. " << endl;
+  cout << "2. Press \"enter\" between generations." << endl;
+  cout << "3. Output all results to a file. " << endl;
+
+  while (!isValid)
+  {
+    cout << "Enter the number corresponding to the output type you want: ";
+    getline(cin, userInput);
+
+    if (userInput == "1")
+    {
+      output = "pause";
+      isValid = true;
+    }
+    else if (userInput == "2")
+    {
+      output = "enter";
+      isValid = true;
+    }
+    else if (userInput == "3")
+    {
+      output = "file";
+      isValid = true;
+    }
+    else
+    {
+      cout << "Invalid choice." << endl;
+    }
+  }
+}
+
+int Menu::getRows()
+{
+  return rows;
+}
+
+int Menu::getColumns()
+{
+  return columns;
+}
+
+float Menu::getDensity()
+{
+  return density;
+}
+
+string Menu::getBoundary()
+{
+  return boundary;
+}
+
+string Menu::getOutput()
+{
+  return output;
 }
