@@ -9,7 +9,7 @@ Menu::Menu()
   columns = 0;
   density = 0.0;
   boundary = "";
-  output = "";
+  outputType = "";
   sim = NULL;
 }
 
@@ -39,17 +39,8 @@ void Menu::initialize()
     }
     else if (userInput == "2")
     {
-      cout << "-Random Assignment-" << endl;
       validInput = true;
-      cout << "Enter the number of rows: ";
-      setParameter(&rows);
-      cout << "Enter the number of columns: ";
-      setParameter(&columns);
-      setDensity();
-
-      //creates a new map from scratch
-      sim = new Game(rows, columns);
-      cout << sim->toString();
+      fromRandom();
     }
     else if (userInput == "3")
     {
@@ -61,8 +52,6 @@ void Menu::initialize()
       cout << "Invalid choice. " << endl;
     }
   }
-
-  setBoundary();
 }
 
 void Menu::setParameter(int* value)
@@ -160,10 +149,12 @@ void Menu::printResults()
   cout << "Columns: " << columns << endl;
   cout << "Density: " << density << endl;
   cout << boundary << endl;
-  cout << output << endl;
+  cout << outputType << endl;
+  if (sim != NULL)
+    cout << sim->toString();
 }
 
-void Menu::setOutput()
+void Menu::setOutputType()
 {
   bool isValid = false;
   string userInput = "";
@@ -180,17 +171,17 @@ void Menu::setOutput()
 
     if (userInput == "1")
     {
-      output = "pause";
+      outputType = "pause";
       isValid = true;
     }
     else if (userInput == "2")
     {
-      output = "enter";
+      outputType = "enter";
       isValid = true;
     }
     else if (userInput == "3")
     {
-      output = "file";
+      outputType = "file";
       isValid = true;
     }
     else
@@ -198,6 +189,21 @@ void Menu::setOutput()
       cout << "Invalid choice." << endl;
     }
   }
+}
+
+void Menu::fromRandom()
+{
+  cout << "-Random Assignment-" << endl;
+  cout << "Enter the number of rows: ";
+  setParameter(&rows);
+  cout << "Enter the number of columns: ";
+  setParameter(&columns);
+  setDensity();
+
+  //creates a new map from scratch - CHANGE GAME TYPE TO SUBTYPE RANDOM ONCE DEFINED
+  sim = new Game(rows, columns);
+  setBoundary();
+  sim->populate(density);
 }
 
 int Menu::getRows()
@@ -220,7 +226,7 @@ string Menu::getBoundary()
   return boundary;
 }
 
-string Menu::getOutput()
+string Menu::getOutputType()
 {
-  return output;
+  return outputType;
 }

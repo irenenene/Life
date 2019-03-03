@@ -21,19 +21,21 @@ public:
   void setDensity();
   void setBoundary();
   void printResults(); //only used for testing
-  void setOutput(); //determines output type (with/without pause, or write to file)
+  void setOutputType(); //determines output type (with/without pause, or write to file)
+  void fromRandom(); //creates a new simulation from user-defined inputs
+  //void fromFile(); //creates a new simulation from a user-specified file
   //accessors
   int getRows();
   int getColumns();
   float getDensity();
   string getBoundary();
-  string getOutput();
+  string getOutputType();
 private:
   int rows;
   int columns;
   float density;
   string boundary; //change these to enums?
-  string output;
+  string outputType;
   Game* sim;
 };
 

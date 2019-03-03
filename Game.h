@@ -16,19 +16,18 @@ public:
   Game();
   Game(int r, int c);
   ~Game();
-//  void calcNeighbor();
-//  void populate(float);
-
+  //void calcNeighbor();
+  void populate(float d);
+  //void populate(File);
   string toString(); //currentGen
   /*
   clone();
   equals();
   */
-  //void populate(File);
 
-private:
-  bool** currentGen; //will be pointing to an array of bool pointers- basically a 2-d array
-//  bool** nextGen;
+protected:
+  bool** currentGen; //basically a 2-d array; a value of true means the cell is alive
+  bool** nextGen;
   int rows;
   int columns;
 
