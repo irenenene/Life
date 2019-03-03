@@ -41,6 +41,7 @@ void Menu::initialize()
     {
       validInput = true;
       fromRandom();
+      sim->calcNeighbor();
     }
     else if (userInput == "3")
     {
@@ -152,6 +153,8 @@ void Menu::printResults()
   cout << outputType << endl;
   if (sim != NULL)
     cout << sim->toString();
+    cout << "Next Generation: " << endl;
+    cout << sim->toStringNext();
 }
 
 void Menu::setOutputType()
@@ -201,7 +204,10 @@ void Menu::fromRandom()
   setDensity();
 
   //creates a new map from scratch - CHANGE GAME TYPE TO SUBTYPE RANDOM ONCE DEFINED
-  sim = new Game(rows, columns);
+  //sim = new Game(rows, columns);
+  //******************CREATE NEW INSTANCE OF CLASSIC HERE *********************
+  sim = new Classic(rows, columns);
+  //***************************************************************************
   setBoundary();
   sim->populate(density);
 }

@@ -1,4 +1,3 @@
-#include "Menu.h"
 #include "Game.h"
 #include <iostream>
 #include <cstdlib>
@@ -57,6 +56,28 @@ string Game::toString()
       for (int j = 0; j < columns; j++)
       {
         if(currentGen[i][j])
+          out += "X";
+        else
+          out += "-";
+      }
+      out += "\n";
+    }
+  }
+
+  return out;
+}
+
+string Game::toStringNext()
+{
+  string out = "";
+
+  if (nextGen != NULL)
+  {
+    for (int i = 0; i < rows; i++)
+    {
+      for (int j = 0; j < columns; j++)
+      {
+        if(nextGen[i][j])
           out += "X";
         else
           out += "-";

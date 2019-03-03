@@ -7,6 +7,7 @@
 #define MENU_H
 
 #include "Game.h"
+#include "Classic.h"
 #include <iostream>
 
 using namespace std;

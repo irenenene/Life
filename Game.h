@@ -16,10 +16,11 @@ public:
   Game();
   Game(int r, int c);
   ~Game();
-  //void calcNeighbor();
+  virtual void calcNeighbor() =0;
   void populate(float d);
   //void populate(File);
   string toString(); //currentGen
+  string toStringNext(); //for nextGen testing purposes
   /*
   clone();
   equals();
