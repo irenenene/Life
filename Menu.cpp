@@ -41,7 +41,17 @@ void Menu::initialize()
     {
       validInput = true;
       fromRandom();
-      sim->calcNeighbor();
+      setBoundary();
+      if(boundary == "classic")
+      {
+        sim = new Classic(rows, columns);
+      }
+      else if(boundary == "doughnut")
+      {
+        sim = new Donut(rows, columns);
+      }
+      sim->populate(density);
+      sim->calcNeighbor(); //remove after testing?
     }
     else if (userInput == "3")
     {
@@ -194,6 +204,8 @@ void Menu::setOutputType()
   }
 }
 
+//sets rows, columns, and population density
+//only used when user creates a new random assignment
 void Menu::fromRandom()
 {
   cout << "-Random Assignment-" << endl;
@@ -202,14 +214,6 @@ void Menu::fromRandom()
   cout << "Enter the number of columns: ";
   setParameter(&columns);
   setDensity();
-
-  //creates a new map from scratch - CHANGE GAME TYPE TO SUBTYPE RANDOM ONCE DEFINED
-  //sim = new Game(rows, columns);
-  //******************CREATE NEW INSTANCE OF CLASSIC HERE *********************
-  sim = new Classic(rows, columns);
-  //***************************************************************************
-  setBoundary();
-  sim->populate(density);
 }
 
 int Menu::getRows()
