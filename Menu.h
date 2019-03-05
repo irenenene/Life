@@ -9,6 +9,7 @@
 #include "Game.h"
 #include "Classic.h"
 #include "Donut.h"
+#include "Mirror.h"
 #include <iostream>
 
 using namespace std;

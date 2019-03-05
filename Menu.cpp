@@ -50,6 +50,10 @@ void Menu::initialize()
       {
         sim = new Donut(rows, columns);
       }
+      else if(boundary == "mirror")
+      {
+        sim = new Mirror(rows, columns);
+      }
       sim->populate(density);
       sim->calcNeighbor(); //remove after testing?
     }
