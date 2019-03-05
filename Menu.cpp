@@ -1,5 +1,7 @@
 #include "Menu.h"
 #include <sstream>
+#include <fstream>
+#include <unistd.h>
 
 using namespace std;
 
@@ -8,14 +10,13 @@ Menu::Menu()
   rows = 0;
   columns = 0;
   density = 0.0;
-  boundary = "";
-  outputType = "";
   sim = NULL;
+  fileString = "";
 }
 
 Menu::~Menu()
 {
-  cout << "No news is good news." << endl;
+  cout << "Deleting game object" << endl;
   delete sim;
 }
 
@@ -36,37 +37,29 @@ void Menu::initialize()
     if (userInput == "1")
     {
       validInput = true;
+      fromFile();
+      setBoundary();
+      sim->populate(fileString);
     }
     else if (userInput == "2")
     {
       validInput = true;
       fromRandom();
       setBoundary();
-      if(boundary == "classic")
-      {
-        sim = new Classic(rows, columns);
-      }
-      else if(boundary == "doughnut")
-      {
-        sim = new Donut(rows, columns);
-      }
-      else if(boundary == "mirror")
-      {
-        sim = new Mirror(rows, columns);
-      }
       sim->populate(density);
-      sim->calcNeighbor(); //remove after testing?
     }
     else if (userInput == "3")
     {
       validInput = true;
-      //add some exit code
+      exit(0);
     }
     else
     {
       cout << "Invalid choice. " << endl;
     }
   }
+
+  setOutputType();
 }
 
 void Menu::setParameter(int* value)
@@ -120,6 +113,10 @@ void Menu::setDensity()
   }
 }
 
+/*
+precondition: row and column needs to be set
+postcondition: sim will be pointing to a new subclass of Game
+*/
 void Menu::setBoundary()
 {
   string input;
@@ -138,17 +135,17 @@ void Menu::setBoundary()
     if (input == "1")
     {
       isValid = true;
-      boundary = "classic";
+      sim = new Classic(rows, columns);
     }
     else if (input == "2")
     {
       isValid = true;
-      boundary = "doughnut";
+      sim = new Donut(rows, columns);
     }
     else if (input == "3")
     {
       isValid = true;
-      boundary = "mirror";
+      sim = new Mirror(rows, columns);
     }
     else
     {
@@ -157,18 +154,46 @@ void Menu::setBoundary()
   }
 }
 
-void Menu::printResults()
+void Menu::runWithPause()
 {
-  //testing
-  cout << "Rows: " << rows << endl;
-  cout << "Columns: " << columns << endl;
-  cout << "Density: " << density << endl;
-  cout << boundary << endl;
-  cout << outputType << endl;
-  if (sim != NULL)
+  while(!sim->isEmpty() && !sim->isStable() && (sim->getGenNum() < ITERATIONS))
+  {
     cout << sim->toString();
-    cout << "Next Generation: " << endl;
-    cout << sim->toStringNext();
+    sim->calcNeighbor();
+    sim->update();
+    usleep(MILLISECONDS * 1000);
+  }
+}
+
+void Menu::runWithEnter()
+{
+  while(!sim->isEmpty() && !sim->isStable() && (sim->getGenNum() < ITERATIONS))
+  {
+    cout << sim->toString();
+    sim->calcNeighbor();
+    sim->update();
+    getchar();
+  }
+}
+
+void Menu::outToFile()
+{
+  cout << "Enter a filename:";
+  getline(cin, fileString);
+
+  ofstream outFile;
+  outFile.open(fileString);
+
+  if(outFile)
+  {
+    while(!sim->isEmpty() && !sim->isStable() && (sim->getGenNum() < ITERATIONS))
+    {
+      outFile << sim->toString();
+      sim->calcNeighbor();
+      sim->update();
+    }
+  }
+  outFile.close();
 }
 
 void Menu::setOutputType()
@@ -188,17 +213,17 @@ void Menu::setOutputType()
 
     if (userInput == "1")
     {
-      outputType = "pause";
+      runWithPause();
       isValid = true;
     }
     else if (userInput == "2")
     {
-      outputType = "enter";
+      runWithEnter();
       isValid = true;
     }
     else if (userInput == "3")
     {
-      outputType = "file";
+      outToFile();
       isValid = true;
     }
     else
@@ -220,27 +245,33 @@ void Menu::fromRandom()
   setDensity();
 }
 
-int Menu::getRows()
+//sets rows and columns from a user-specified file
+//only used when user starts with map file
+//postcondition: fileString is set
+void Menu::fromFile()
 {
-  return rows;
-}
+  ifstream inFile;
+  string input = "";
+  bool validFile = true;
 
-int Menu::getColumns()
-{
-  return columns;
-}
+  cout << "-Map File-" << endl;
+  cout << "Please enter a filename: ";
+  getline(cin, fileString);
+  inFile.open(fileString);
 
-float Menu::getDensity()
-{
-  return density;
-}
+  if(!inFile)
+  {
+    cout << "Error finding file. " << endl;
+    validFile = false;
+  }
+  else
+  {
+    inFile >> rows;
+    inFile.ignore(MAX_LINE, '\n');
 
-string Menu::getBoundary()
-{
-  return boundary;
-}
+    inFile >> columns;
+    inFile.ignore(MAX_LINE, '\n');
 
-string Menu::getOutputType()
-{
-  return outputType;
+    inFile.close();
+  }
 }

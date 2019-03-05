@@ -23,22 +23,21 @@ public:
   void setParameter(int*); //used for int parameter such as rows or columns
   void setDensity();
   void setBoundary();
-  void printResults(); //only used for testing
   void setOutputType(); //determines output type (with/without pause, or write to file)
   void fromRandom(); //creates a new simulation from user-defined inputs
-  //void fromFile(); //creates a new simulation from a user-specified file
-  //accessors
-  int getRows();
-  int getColumns();
-  float getDensity();
-  string getBoundary();
-  string getOutputType();
+  void fromFile(); //creates a new simulation from a user-specified file
+  void runWithPause();
+  void runWithEnter();
+  void outToFile();
+  static const int ITERATIONS = 10;
+  static const int MILLISECONDS = 1000;
+  static const int MAX_LINE = 65536;
+
 private:
   int rows;
   int columns;
   float density;
-  string boundary; //change these to enums?
-  string outputType;
+  string fileString;
   Game* sim;
 };
 

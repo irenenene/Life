@@ -20,7 +20,8 @@ Donut::~Donut()
 
 void Donut::calcNeighbor()
 {
-  cout << "Donut->calcNeighbor" << endl;
+  genNum++;
+  
   for (int i = 0; i < rows; i++)
   {
     for (int j = 0; j < columns; j++)
