@@ -1,3 +1,12 @@
+/*
+Irene Liu
+2313260
+irliu@chapman.edu
+CPSC 350-02
+Assignment: 2
+
+*/
+
 #include "Menu.h"
 #include "Game.h"
 #include <iostream>
