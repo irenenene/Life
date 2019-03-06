@@ -29,7 +29,7 @@ public:
   void runWithPause();
   void runWithEnter();
   void outToFile();
-  static const int ITERATIONS = 10;
+  static const int ITERATIONS = 1000;
   static const int MILLISECONDS = 1000;
   static const int MAX_LINE = 65536;
 

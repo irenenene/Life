@@ -193,6 +193,10 @@ void Menu::outToFile()
       sim->update();
     }
   }
+  else
+  {
+    cout << "error writing to file." << endl;
+  }
   outFile.close();
 }
 
@@ -251,8 +255,6 @@ void Menu::fromRandom()
 void Menu::fromFile()
 {
   ifstream inFile;
-  string input = "";
-  bool validFile = true;
 
   cout << "-Map File-" << endl;
   cout << "Please enter a filename: ";
@@ -262,7 +264,7 @@ void Menu::fromFile()
   if(!inFile)
   {
     cout << "Error finding file. " << endl;
-    validFile = false;
+    exit(0);
   }
   else
   {
